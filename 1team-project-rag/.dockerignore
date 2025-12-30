@@ -1,0 +1,14 @@
+@"
+**/__pycache__/
+**/*.pyc
+**/.pytest_cache/
+**/.mypy_cache/
+**/.venv/
+**/venv/
+.git/
+.env
+backend/data/chroma_db/
+backend/data/documents/
+"@ | Set-Content -Encoding UTF8 .dockerignore
+
+type .dockerignore

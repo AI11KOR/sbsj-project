@@ -1,0 +1,17 @@
+Flask
+flask-cors
+gunicorn
+joblib
+pyproj
+numpy
+pandas
+scikit-learn==1.7.2
+xgboost
+openpyxl
+flask_cors
+lightgbm
+
+# git 추가
+# git add .
+# git commit -m ""
+# git push origin main

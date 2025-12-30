@@ -1,0 +1,28 @@
+## Server
+fastapi==0.115.12
+uvicorn[standard]==0.38.0
+
+## OpenAI
+openai==1.54.5
+
+## Env
+python-dotenv==1.2.1
+
+## Validation
+pydantic==2.12.5
+
+## HTTP client (pin for fastmcp compatibility on Windows)
+# fastmcp/chromadb 요구사항과 맞추기 위해 0.28.x로 고정합니다.
+httpx==0.28.1
+
+## RAG
+chromadb==0.5.23
+sentence-transformers>=2.2.0
+torch>=2.0.0
+pypdf>=3.0.0
+python-docx>=1.0.0
+tiktoken>=0.5.0
+
+## MCP
+fastmcp==2.13.0
+

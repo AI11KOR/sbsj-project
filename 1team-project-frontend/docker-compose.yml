@@ -1,0 +1,69 @@
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: "http://backend:8000"
+        NEXT_PUBLIC_RAG_URL: "http://rag:8001"
+        NEXT_PUBLIC_FLASK_URL: "http://ai:5000"
+        NEXT_PUBLIC_KAKAO_MAP_KEY: "${NEXT_PUBLIC_KAKAO_MAP_KEY}"
+    image: ai11/frontend:latest
+    container_name: frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+      - rag
+      - ai
+
+  backend:
+    image: ai11/backend:latest
+    container_name: backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - ../1team-project-backend/.env
+
+
+  rag:
+    build:
+      context: ../1team-project-rag
+      dockerfile: backend/Dockerfile
+    image: ai11/rag:latest
+    container_name: rag
+    ports:
+      - "8001:8001"
+    env_file:
+      - ../1team-project-rag/backend/.env
+    environment:
+      - MCP_CONFIG_PATH=/app/backend/mcp_config.json
+      - RAG_TOP_K=3
+      - RAG_SCORE_THRESHOLD=0.45
+
+      # ✅ 문서 폴더
+      - DOCS_DIR=/app/data/documents
+
+      # ✅ Chroma 경로 통일
+      - CHROMA_DIR=/app/data/chroma_db
+      - CHROMA_PERSIST_DIRECTORY=/app/data/chroma_db
+      - CHROMA_DB_DIR=/app/data/chroma_db
+
+      # ✅ 한글/토크나이저 로그 안정화
+      - PYTHONUTF8=1
+      - TOKENIZERS_PARALLELISM=false
+
+      # ✅ CORS 허용 Origin (콤마로 여러 개)
+      - CORS_ORIGINS=http://43.201.248.189:3000,http://localhost:3000,http://127.0.0.1:3000
+
+      # ✅ (선택) 디버그 로그 켜기
+      - CORS_DEBUG=1
+    volumes:
+      - "C:/dngus523/project/1team-project-rag/backend/data/documents:/app/data/documents"
+      - "C:/dngus523/project/1team-project-rag/backend/data/chroma_db:/app/data/chroma_db"
+
+  ai:
+    image: ai11/ai:latest
+    container_name: ai
+    ports:
+      - "5000:5000"
